@@ -1,0 +1,128 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Text files
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.csv text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+
+# C/C++ source files
+*.c text eol=lf
+*.h text eol=lf
+*.cpp text eol=lf
+*.hpp text eol=lf
+*.cc text eol=lf
+*.cxx text eol=lf
+
+# Web files
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.fish text eol=lf
+
+# Windows batch files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files (explicitly marked to prevent text processing)
+*.pkl binary
+*.pickle binary
+*.npy binary
+*.npz binary
+*.h5 binary
+*.hdf5 binary
+*.keras binary
+*.model binary
+*.weights binary
+*.ckpt binary
+*.pb binary
+*.pth binary
+*.pt binary
+*.joblib binary
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.tiff binary
+*.tga binary
+*.svg binary
+*.ico binary
+*.pdf binary
+
+# Archive files
+*.zip binary
+*.tar binary
+*.gz binary
+*.bz2 binary
+*.xz binary
+*.7z binary
+*.rar binary
+
+# Audio/Video files
+*.mp3 binary
+*.mp4 binary
+*.avi binary
+*.mov binary
+*.wav binary
+*.flac binary
+
+# Data files (treat as binary to preserve integrity)
+*.dat binary
+*.bin binary
+*.exe binary
+*.dll binary
+*.so binary
+
+# STM32/Embedded files
+*.hex binary
+*.elf binary
+*.axf binary
+*.map binary
+*.o binary
+
+# Jupyter notebooks (handle with care due to potential merge conflicts)
+*.ipynb text eol=lf
+
+# Git configuration files
+.gitignore text eol=lf
+.gitattributes text eol=lf
+.gitmodules text eol=lf
+
+# Language detection overrides for GitHub
+*.c linguist-language=C
+*.h linguist-language=C
+*.py linguist-language=Python
+*.md linguist-documentation
+
+# Large file storage (if using Git LFS)
+# Uncomment these lines if you plan to use Git LFS for large files:
+# *.pkl filter=lfs diff=lfs merge=lfs -text
+# *.npy filter=lfs diff=lfs merge=lfs -text
+# *.keras filter=lfs diff=lfs merge=lfs -text
+# *.h5 filter=lfs diff=lfs merge=lfs -text
+
+# Export ignore (files not included in git archive)
+.gitattributes export-ignore
+.gitignore export-ignore
+.github/ export-ignore
+tests/ export-ignore
+docs/ export-ignore
