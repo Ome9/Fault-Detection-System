@@ -1,4 +1,4 @@
-# NASA IMS Bearing Fault Detection System
+# Fault Detection System
 
 ## 🔍 Overview
 
