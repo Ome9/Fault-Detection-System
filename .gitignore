@@ -116,7 +116,7 @@ dmypy.json
 # Machine Learning / Data Science specific
 *.h5
 *.hdf5
-*.pkl
+# *.pkl  # Allow STM32 scaler files (small size)
 *.pickle
 *.joblib
 *.model
@@ -128,14 +128,14 @@ dmypy.json
 
 # TensorFlow
 *.tfrecord
-*.tflite
+# *.tflite  # Allow STM32 model files (small size)
 logs/
 tensorboard_logs/
 checkpoints/
 saved_models/
 
 # Keras
-*.keras
+# *.keras  # Allow STM32 model files (small size)
 model_weights/
 
 # Jupyter notebooks (optional - comment out if you want to track them)
@@ -160,7 +160,7 @@ model_weights/
 # Large binary files
 *.bin
 *.dat
-*.npy
+# *.npy  # Allow STM32 threshold files (small size)
 *.npz
 
 # Plots and figures
@@ -213,15 +213,37 @@ Thumbs.db
 Debug/
 Release/
 
+# Allow STM32 model header files (model_data.h files are small ~27-28KB)
+!**/model_data.h
+!**/*bearing*.h
+
 # Temporary files
 *.tmp
 *.temp
 *.bak
 *.backup
 
-# Project specific
-# Uncomment these if you don't want to track the generated files:
-# nasa_bearing_autoencoder.keras
-# scaler.pkl
-# threshold.npy
-# stm32_nasa_bearing_detection.c
+# Project specific - STM32 model files (allowed due to small size < 100MB)
+# File size analysis performed on 2025-09-26:
+# All STM32 model files are well under GitHub's 100MB limit:
+# - *.tflite (TensorFlow Lite models): ~4KB each
+# - *.keras (Keras models): ~37-105KB each 
+# - *.pkl (Scaler files): ~0.6-0.8KB each
+# - *.npy (Threshold files): ~130 bytes each
+# - *.h (C header files): ~27-28KB each
+# - *.c (STM32 implementation files): ~6-17KB each
+# Total deployment package size: ~200KB (well under limits)
+# No Git LFS required - all files can be tracked normally
+
+# The following STM32 deployment files are now tracked:
+# ✅ nasa_bearing_autoencoder.keras
+# ✅ scaler.pkl  
+# ✅ threshold.npy
+# ✅ stm32_deployment/ (complete deployment packages)
+# ✅ stm32_deployment_complete/
+# ✅ tinyml_models/
+# ✅ stm32_tinyml_bearing_detection.c
+# ✅ stm32_nasa_bearing_detection.c
+
+# Large dataset files still ignored:
+# ❌ 1st_test/, 2nd_test/, 3rd_test/ (NASA IMS dataset - too large)
