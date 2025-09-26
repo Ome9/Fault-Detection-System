@@ -42,11 +42,61 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
-nosetests.xml
+nosetasks.xml
 coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+
+# Dataset files (large files)
+MIMII_Dataset/
+CWRU_Dataset/
+HUST_Dataset/
+1st_test/
+2nd_test/
+3rd_test/
+*.wav
+*.mat
+*.csv
+*.npy
+
+# Model files and deployment artifacts (exclude large training models but keep refined deployment)
+models/*.h5
+models/*.keras
+models/*.pkl
+*.onnx
+
+# Allow important deployment artifacts
+!refined_deployment/refined_model.tflite
+!refined_deployment/refined_model_data.h
+
+# Generated test data
+tests/*.json
+tests/c_test_data.h
+tests/comprehensive_test_vectors.json
+tests/test_plots/
+tests/build/
+
+# Build artifacts
+*.exe
+*.o
+*.obj
+*.dll
+*.so
+*.dylib
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Virtual environments
+.env
+.venv/
+env/
+venv/
 
 # Translations
 *.mo

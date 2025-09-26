@@ -1,87 +1,126 @@
-# Fault Detection System
+# Refined Multi-Dataset Bearing Fault Detection System
 
 ## 🔍 Overview
 
-This project implements an advanced **Autoencoder-based Fault Detection System** for bearing analysis using the NASA IMS (Intelligent Maintenance Systems) Bearing Dataset. The system is specifically designed and optimized for deployment on **STM32 F446RE** microcontrollers, enabling real-time bearing condition monitoring in industrial environments.
+A state-of-the-art bearing fault detection system using advanced autoencoder neural networks, achieving **75.5% F1-score** through sophisticated multi-dataset training and feature engineering. The system is optimized for STM32 deployment with comprehensive testing infrastructure.
+
+## � Performance Highlights
+
+- **F1-Score**: 75.5% (exceeds 63.4% target by 19%)
+- **Accuracy**: 88.0%
+- **Fault Detection Rate**: 74.0%
+- **Normal Detection Rate**: 92.7%
+- **Model Size**: 15.4 KB (STM32 compatible)
+- **Features**: 16 optimized indicators
+- **Error Separation**: 5.46x between normal and fault conditions
 
 ## 🎯 Key Features
 
-- **Advanced Feature Extraction**: 16 optimized features including time-domain, frequency-domain, and wavelet-based features
-- **Deep Learning Model**: Autoencoder neural network for anomaly detection
-- **Real NASA Data**: Trained on authentic NASA IMS bearing run-to-failure datasets
-- **STM32 Ready**: Optimized C code generation for STM32 F446RE microcontroller
-- **Multiple Test Sets**: Supports all 3 NASA IMS test sets with different failure modes
-- **Comprehensive Analysis**: Includes visualization, performance metrics, and risk assessment
+- **Multi-Dataset Training**: Combines NASA, CWRU, and HUST datasets for robust performance
+- **Advanced Feature Engineering**: 16 optimized bearing fault indicators
+- **Autoencoder Architecture**: 16→48→24→12→24→48→16 with batch normalization
+- **STM32 Ready**: TensorFlow Lite deployment with C header generation
+- **Comprehensive Testing**: Sensor simulation framework without hardware requirements
+- **Real-time Performance**: Optimized for embedded systems
 
 ## 📊 Dataset Information
 
-The NASA IMS Bearing Dataset consists of:
-- **Test Set 1**: 2,156 files, failures in bearing 3 (inner race) and bearing 4 (roller)
-- **Test Set 2**: 984 files, outer race failure in bearing 1  
-- **Test Set 3**: 4,448 files, outer race failure in bearing 3
-- **Sampling Rate**: 20kHz, 20,480 points per file (1-second snapshots)
-- **Bearings**: Rexnord ZA-2115 double row bearings
-- **Operating Conditions**: 2000 RPM, 6000 lbs radial load
+### Supported Datasets
+- **NASA IMS**: 7,588 samples from multiple bearing test scenarios
+- **CWRU**: Case Western Reserve University bearing data
+- **HUST**: Huazhong University of Science and Technology dataset (1,996 samples)
+- **MIMII**: Machine sound dataset (6 machine types, 20,119+ samples)
+
+### Data Processing
+- **Sampling Rate**: 20kHz
+- **Segment Size**: 4,096 points
+- **Feature Extraction**: Statistical, spectral, and envelope analysis
+- **Normalization**: StandardScaler with robust outlier handling
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 ```bash
-pip install tensorflow numpy pandas matplotlib seaborn scikit-learn scipy pathlib
+pip install tensorflow numpy pandas matplotlib seaborn scikit-learn scipy
 ```
 
-### Usage
+### Training and Deployment
 
-1. **Download the NASA IMS Dataset**:
-   - Visit: [NASA Prognostics Center of Excellence Data Repository](https://www.nasa.gov/content/prognostics-center-of-excellence-data-set-repository)
-   - Download "IMS Rexnord Bearing Data.zip"
-   - Extract to your desired location
-
-2. **Update Dataset Path**:
-   ```python
-   # In Code.py, line ~595
-   dataset_path = "path/to/your/unzipped/IMS/folder"
-   ```
-
-3. **Run the System**:
+1. **Train the Refined Model**:
    ```bash
-   python Code.py
+   python src/refined_multi_dataset_model.py
    ```
 
-### Using Synthetic Data (Demo)
+2. **Test Without Hardware**:
+   ```bash
+   cd tests
+   python generate_test_data.py
+   run_tests.bat
+   ```
 
-If you don't have the NASA dataset, the system will automatically generate synthetic bearing data for demonstration:
-
-```python
-python Code.py  # Will detect missing dataset and use synthetic data
-```
+3. **Interactive Testing**:
+   ```bash
+   cd tests
+   build/refined_model_test.exe interactive
+   ```
 
 ## 🏗️ Project Structure
 
 ```
 errorDetection/
-├── Code.py                              # Main implementation
-├── convert_model.py                     # Model conversion utilities  
-├── stm32_nasa_bearing_detection.c      # Generated STM32 C code
-├── nasa_bearing_autoencoder.keras      # Trained Keras model
-├── scaler.pkl                          # Feature scaling parameters
-├── threshold.npy                       # Anomaly detection threshold
-├── 1st_test/                           # NASA Test Set 1 data
-├── 2nd_test/                           # NASA Test Set 2 data  
-├── 3rd_test/                           # NASA Test Set 3 data
-└── .venv/                              # Virtual environment
+├── src/                                 # Source code
+│   ├── refined_multi_dataset_model.py  # Main refined model (75.5% F1)
+│   ├── multi_dataset_model.py          # Multi-dataset baseline
+│   ├── improved_model.py               # Model improvements
+│   └── optimized_model.py              # Optimization strategies
+├── tests/                               # Testing framework
+│   ├── refined_model_test.c             # C testing simulation
+│   ├── generate_test_data.py            # Test data generator
+│   ├── run_tests.bat                    # Windows test runner
+│   └── Makefile                         # Build system
+├── refined_deployment/                  # Deployment artifacts
+│   ├── refined_model.tflite             # TensorFlow Lite model
+│   └── refined_model_data.h             # C header with model data
+├── models/                              # Trained models
+│   └── *.h5                            # Keras model files
+├── data/                               # Processed datasets
+├── docs/                               # Documentation
+├── CWRU_Dataset/                       # Case Western dataset
+├── HUST_Dataset/                       # HUST bearing data
+├── MIMII_Dataset/                      # MIMII machine sounds
+└── requirements.txt                    # Python dependencies
 ```
 
 ## 🧠 System Architecture
 
+### Refined Autoencoder Model
+
+The refined model uses a sophisticated architecture optimized for bearing fault detection:
+
+```
+Input (16 features) → Dense(48) → BatchNorm → Dropout(0.1) →
+Dense(24) → BatchNorm → Dropout(0.1) →
+Dense(12, bottleneck) → 
+Dense(24) → BatchNorm → Dropout(0.1) →
+Dense(48) → BatchNorm → Dropout(0.1) → 
+Dense(16, output)
+```
+
 ### Feature Extraction Pipeline
 
-1. **Time-Domain Features**:
-   - RMS (Root Mean Square)
-   - Peak value and Crest Factor
-   - Statistical moments (Skewness, Kurtosis)
-   - Shape and Impulse factors
+**16 Advanced Features**:
+1. **Statistical Features**: RMS, Peak, Mean, Std Dev, Skewness, Kurtosis
+2. **Shape Factors**: Crest Factor, Clearance Factor, Shape Factor, Impulse Factor
+3. **Amplitude Features**: Peak-to-Peak, Mean Absolute, Median
+4. **Advanced Features**: Envelope RMS, Spectral Energy, Percentile Range
+
+### Multi-Dataset Integration
+
+- **NASA**: Bearing run-to-failure data with clear fault progressions
+- **CWRU**: Controlled fault conditions with various load levels
+- **HUST**: MAT file format with vibration measurements (1,996 samples)
+- **MIMII**: Industrial machine sound data for robustness validation
 
 2. **Frequency-Domain Features**:
    - Spectral centroid and spread
@@ -109,56 +148,84 @@ errorDetection/
 - **Risk Levels**: LOW, MEDIUM, HIGH, CRITICAL
 - **Performance**: Optimized for bearing fault patterns
 
-## 📈 Performance Metrics
+## 📈 Performance Evolution
 
-The system provides comprehensive evaluation including:
-- **Accuracy**: Overall classification performance
-- **Precision/Recall**: Anomaly detection quality  
-- **F1-Score**: Balanced performance metric
-- **ROC Analysis**: Threshold sensitivity analysis
-- **Condition-Specific**: Performance by bearing condition
+| Model Version | F1-Score | Accuracy | Notes |
+|---------------|----------|----------|-------|
+| Original | 10.7% | 61.2% | Baseline implementation |
+| Improved | 45.3% | 72.1% | Enhanced features |
+| Optimized | 63.4% | 83.7% | Target performance |
+| **Refined** | **75.5%** | **88.0%** | **Multi-dataset training** |
+
+### Refined Model Details
+- **Training Data**: 29,703 samples across multiple datasets
+- **Architecture**: 6-layer autoencoder with batch normalization
+- **Threshold**: 0.045142 (optimized via ROC analysis)
+- **Error Separation**: 5.46x between normal/fault conditions
+- **Deployment Size**: 15.4 KB TensorFlow Lite model
 
 ## 🔧 STM32 Deployment
 
 ### Hardware Requirements
-- **MCU**: STM32 F446RE (or compatible)
-- **Memory**: ~32KB Flash, ~8KB RAM
-- **Peripherals**: ADC, UART, Timer
-- **Sensors**: Vibration sensor (accelerometer)
+- **MCU**: STM32 with ARM Cortex-M4 or higher
+- **Memory**: ~32KB Flash, ~16KB RAM
+- **Peripherals**: ADC for sensor input, UART for debugging
+- **Sensors**: Accelerometer or vibration sensor (20kHz capable)
 
-### Generated Code Features
-- **Real-time Processing**: 1kHz sampling rate
-- **Optimized Math**: Fast sqrt, tanh implementations  
-- **Memory Efficient**: Fixed-point arithmetic
-- **UART Logging**: Results transmission
-- **LED Indicators**: Visual fault indication
+### Deployment Files
+- `refined_model.tflite`: TensorFlow Lite model (15.4 KB)
+- `refined_model_data.h`: C header with model weights
+- `refined_model_test.c`: Testing and validation code
 
-### Deployment Steps
-1. Run `python Code.py` to generate `stm32_nasa_bearing_detection.c`
-2. Insert actual trained model weights in the C file
-3. Configure hardware peripherals for your board
-4. Compile and flash to STM32 F446RE
+### Integration Steps
+1. Include `refined_model_data.h` in your STM32 project
+2. Set up TensorFlow Lite Micro interpreter
+3. Configure ADC for 20kHz vibration sampling
+4. Implement feature extraction in real-time
+5. Use reconstruction error for anomaly detection
 
-## 📊 Visualization
+## 🧪 Testing Framework
 
-The system generates comprehensive plots:
-- Reconstruction error distributions by condition
-- Confusion matrices for performance assessment
-- ROC curves for threshold analysis  
-- Timeline views of bearing degradation
+### Comprehensive Testing
+- **Automated Tests**: 10 predefined bearing conditions
+- **Interactive Mode**: Custom parameter testing
+- **Hardware-Free**: Complete simulation without sensors
+- **Validation**: C implementation matches Python model
+
+### Running Tests
+```bash
+cd tests
+make test                    # Run automated test suite
+make interactive             # Interactive testing mode
+python generate_test_data.py # Generate additional test vectors
+```
 
 ## 🔬 Research Applications
 
-This system is valuable for:
-- **Predictive Maintenance**: Early fault detection
-- **Industrial IoT**: Edge-based monitoring
-- **Research**: Bearing fault analysis methodologies
-- **Education**: ML applications in mechanical engineering
+This system enables:
+- **Predictive Maintenance**: Early fault detection in industrial machinery
+- **Edge AI**: Real-time processing without cloud connectivity
+- **Research**: Advanced bearing fault analysis and feature engineering
+- **Education**: Practical ML applications for mechanical systems
 
 ## 🤝 Contributing
 
-Contributions are welcome! Areas for improvement:
-- Additional feature extraction methods
+Contributions welcome! Priority areas:
+- Additional bearing fault types and datasets
+- Advanced feature extraction techniques
+- Model compression and quantization strategies
+- Hardware validation on different STM32 variants
+
+## 📜 License
+
+MIT License - see LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- NASA Prognostics Center of Excellence for IMS dataset
+- Case Western Reserve University for bearing fault data
+- Huazhong University for HUST dataset
+- TensorFlow team for Lite optimization framework
 - Alternative neural network architectures
 - Support for other microcontrollers
 - Enhanced visualization capabilities
